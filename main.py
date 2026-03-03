@@ -1,4 +1,6 @@
 import telebot
+import os
+TOKEN = os.environ.get("TOKEN")
 
 TOKEN = "7256432256:AAF0aMabmwy50kLTAoOkWuQjcYId4XOhRrI"
 
