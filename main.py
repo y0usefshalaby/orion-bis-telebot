@@ -2,40 +2,33 @@ import telebot
 from flask import Flask, request
 import os
 
-
     # ==============================
-    # 🔑 حط التوكن هنا
+    # 🔑 التوكن
     # ==============================
-TOKEN = "7256432256:AAHClOtJ3nUUG0tPHk8LbQ59dE-R3IIYGOQ"
+TOKEN = ""
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
     # ==============================
-    # أمر البداية
+    # أوامر البوت
     # ==============================
 
 @bot.message_handler(commands=['start'])
 def start(message):
         text = """👋 أهلاً بيك في Orion BIS Assistant
 
-    الأقسام المتاحة:
-
-    📚 /subjects        - أسئلة في المواد
-    🎓 /study           - أسئلة في الدراسة
-    🚀 /development     - تطوير الذات والكورسات
-    🎥 /lessons         - طريقة الوصول للدروس
-    🛠 /support         - الدعم الفني
-    ❓ /help            - مساعدة في استخدام البوت
-    🏢 /admin           - التحدث مع الإدارة
+    📚 /subjects
+    🎓 /study
+    🚀 /development
+    🎥 /lessons
+    🛠 /support
+    ❓ /help
+    🏢 /admin
 
     اكتب الأمر وابدأ 👇
     """
         bot.reply_to(message, text)
-
-    # ==============================
-    # الأقسام
-    # ==============================
 
 @bot.message_handler(commands=['subjects'])
 def subjects_section(message):
@@ -59,15 +52,11 @@ def support_section(message):
 
 @bot.message_handler(commands=['help'])
 def help_section(message):
-        bot.reply_to(message, "❓ استخدم الأوامر أو ابدأ بـ /start")
+        bot.reply_to(message, "❓ استخدم /start لعرض الأقسام")
 
 @bot.message_handler(commands=['admin'])
 def admin_section(message):
         bot.reply_to(message, "🏢 اكتب رسالتك للإدارة وسيتم مراجعتها.")
-
-    # ==============================
-    # الرد الذكي
-    # ==============================
 
 @bot.message_handler(func=lambda message: True)
 def smart_reply(message):
@@ -89,7 +78,7 @@ def smart_reply(message):
             bot.reply_to(message, "🤖 استخدم /start لعرض الأقسام.")
 
     # ==============================
-    # Webhook
+    # Webhook Endpoint
     # ==============================
 
 @app.route(f"/{TOKEN}", methods=["POST"])
@@ -98,6 +87,10 @@ def webhook():
         update = telebot.types.Update.de_json(json_str)
         bot.process_new_updates([update])
         return "OK", 200
+
+    # ==============================
+    # الصفحة الرئيسية (للمونيتور)
+    # ==============================
 
 @app.route("/")
 def home():
@@ -108,6 +101,4 @@ def home():
     # ==============================
 
 if __name__ == "__main__":
-        bot.remove_webhook()
-        bot.set_webhook(url=f"https://qand-a-orion-bis-telebot--yovexevilghost.replit.app/{TOKEN}")
-        app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+        app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
